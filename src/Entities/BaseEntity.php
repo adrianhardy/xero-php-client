@@ -105,6 +105,9 @@ abstract class BaseEntity {
                         $entity->$propertyKey = new DateTime($propertyValue);
                     }
                 }
+            } elseif (property_exists($entity, $propertyKey) && substr($propertyValue, 0, 6) == '/Date(') {
+                $timestamp = preg_replace('|/Date\((\d+)\+\d{4}\)/|', '\1', $propertyValue);
+                $entity->$propertyKey = new DateTime('@' . intval($timestamp/1000));
             }
         }
 
